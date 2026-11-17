@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use InvalidArgumentException;
 use LogicException;
 
@@ -73,5 +74,11 @@ class CourseEnrollment extends Model
     public function section(): BelongsTo
     {
         return $this->belongsTo(CourseSection::class, 'course_section_id');
+    }
+
+    /** @return HasMany<AssessmentScore, $this> */
+    public function scores(): HasMany
+    {
+        return $this->hasMany(AssessmentScore::class);
     }
 }

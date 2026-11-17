@@ -99,4 +99,10 @@ class Student extends Model
     {
         return $this->hasMany(StudentDocument::class);
     }
+
+    /** @return HasMany<CourseEnrollment, $this> */
+    public function courseEnrollments(): HasMany
+    {
+        return $this->hasMany(CourseEnrollment::class);
+    }
 }
