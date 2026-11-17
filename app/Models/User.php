@@ -72,6 +72,56 @@ class User extends Authenticatable
     }
 
     /**
+     * @return BelongsToMany<College, $this>
+     */
+    public function assignedColleges(): BelongsToMany
+    {
+        return $this->belongsToMany(College::class, 'user_college_assignments')
+            ->withPivot(['valid_from', 'valid_to', 'reason', 'approved_by', 'decision_reference'])
+            ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<Department, $this>
+     */
+    public function assignedDepartments(): BelongsToMany
+    {
+        return $this->belongsToMany(Department::class, 'user_department_assignments')
+            ->withPivot(['valid_from', 'valid_to', 'reason', 'approved_by', 'decision_reference'])
+            ->withTimestamps();
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    public function assignedCollegeIds(): array
+    {
+        return $this->assignedColleges()
+            ->wherePivot('valid_from', '<=', today())
+            ->where(function ($query): void {
+                $query->whereNull('user_college_assignments.valid_to')
+                    ->orWhere('user_college_assignments.valid_to', '>', today());
+            })
+            ->pluck('colleges.id')
+            ->all();
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    public function assignedDepartmentIds(): array
+    {
+        return $this->assignedDepartments()
+            ->wherePivot('valid_from', '<=', today())
+            ->where(function ($query): void {
+                $query->whereNull('user_department_assignments.valid_to')
+                    ->orWhere('user_department_assignments.valid_to', '>', today());
+            })
+            ->pluck('departments.id')
+            ->all();
+    }
+
+    /**
      * @return HasMany<AuditLog, $this>
      */
     public function auditLogs(): HasMany
