@@ -2,8 +2,131 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../../resources/views/**/*.blade.php';
 
+/*
+ * UMS Design System v1.0 — approved 17-11-2026 (E-004).
+ *
+ * This theme is the Tailwind 4 mapping of Documentation/UI-UX/design-tokens.css.
+ * Naming follows Tailwind namespaces (`--color-*`, `--font-*`, `--text-*`,
+ * `--radius-*`, `--shadow-*`) so utilities such as `bg-brand-900`,
+ * `text-ink-500`, `text-h1`, `rounded-md` and `shadow-1` are available.
+ *
+ * Spacing: the approved sp-1..sp-8 scale (4,8,12,16,24,32,48,64px) maps to
+ * Tailwind's native 4px scale as 1, 2, 3, 4, 6, 8, 12, 16.
+ */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    /* Typography — local system fonts only. No CDN, no external @font-face. */
+    --font-sans: 'Segoe UI', Tahoma, Arial, sans-serif;
+    --font-ar: 'Segoe UI', Tahoma, Arial, sans-serif;
+    --font-en: 'Segoe UI', Arial, sans-serif;
+    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+    --text-display: 34px;
+    --text-h1: 26px;
+    --text-h2: 20px;
+    --text-h3: 16px;
+    --text-body: 14px;
+    --text-small: 12.5px;
+    --text-micro: 11px;
+
+    /* Color: neutrals and ink */
+    --color-ink-900: #0b1b2b;
+    --color-ink-700: #24384b;
+    --color-ink-500: #5b6b7b;
+    --color-ink-300: #93a1ae;
+
+    /* Color: brand */
+    --color-brand-900: #0b2438;
+    --color-brand-800: #123a57;
+    --color-brand-700: #1b5578;
+    --color-brand-600: #22749b;
+    --color-teal-600: #0e7c7b;
+    --color-accent-600: #b08a4f;
+
+    /* Color: surfaces and borders */
+    --color-surface-0: #ffffff;
+    --color-surface-1: #f6f8fa;
+    --color-surface-2: #eef2f6;
+    --color-border-1: #dce3ea;
+    --color-border-2: #c5d0da;
+
+    /* Color: semantic */
+    --color-success: #1e7f5c;
+    --color-warning: #a86500;
+    --color-danger: #b42318;
+    --color-info: #2563a6;
+    --color-success-bg: #e9f5ef;
+    --color-warning-bg: #fcf3e4;
+    --color-danger-bg: #fcecea;
+    --color-info-bg: #eaf1fa;
+
+    /* Radius and restrained shadows (floating layers only) */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --shadow-1: 0 1px 2px rgba(11, 27, 43, 0.06);
+    --shadow-2: 0 4px 14px rgba(11, 27, 43, 0.08);
+}
+
+/* Layout tokens are not Tailwind namespaces; keep the approved raw names. */
+:root {
+    --sp-1: 4px;
+    --sp-2: 8px;
+    --sp-3: 12px;
+    --sp-4: 16px;
+    --sp-5: 24px;
+    --sp-6: 32px;
+    --sp-7: 48px;
+    --sp-8: 64px;
+    --lh-body: 1.8;
+    --lh-tight: 1.35;
+    --sidebar-w: 248px;
+    --sidebar-collapsed-w: 72px;
+    --topbar-h: 64px;
+    --content-max: 1440px;
+    --grid-gap: 24px;
+}
+
+@layer base {
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        @apply bg-surface-1 font-sans text-ink-900 antialiased;
+        font-size: var(--text-body);
+        line-height: var(--lh-body);
+    }
+
+    :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+        outline: 2px solid var(--color-brand-600);
+        outline-offset: 2px;
+        border-radius: var(--radius-sm);
+    }
+}
+
+/* Isolate university codes, emails, dates and amounts inside RTL text. */
+@utility ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
 }
