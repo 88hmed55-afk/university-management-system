@@ -152,4 +152,22 @@ class User extends Authenticatable
             })
             ->exists();
     }
+
+    /**
+     * Null means institution-wide; an empty array means no active role.
+     *
+     * @return array<int, int>|null
+     */
+    public function visibleCampusIds(): ?array
+    {
+        if (! $this->hasAnyActiveRole()) {
+            return [];
+        }
+
+        if ($this->hasInstitutionWideAccess()) {
+            return null;
+        }
+
+        return $this->campuses()->pluck('campuses.id')->all();
+    }
 }

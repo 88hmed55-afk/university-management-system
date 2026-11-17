@@ -60,17 +60,13 @@ class Campus extends Model
      */
     public function scopeVisibleTo(Builder $query, User $user): void
     {
-        if (! $user->hasAnyActiveRole()) {
-            $query->whereRaw('1 = 0');
+        $campusIds = $user->visibleCampusIds();
 
+        if ($campusIds === null) {
             return;
         }
 
-        if ($user->hasInstitutionWideAccess()) {
-            return;
-        }
-
-        $query->whereIn('id', $user->campuses()->pluck('campuses.id')->all());
+        $query->whereIn('id', $campusIds);
     }
 
     /**
