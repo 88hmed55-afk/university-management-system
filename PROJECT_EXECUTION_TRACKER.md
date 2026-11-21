@@ -340,7 +340,11 @@
 ### TASK-020 — التحصيل والإيصالات والردود والتسوية (Payments & Reconciliation)
 - **الوصف:** `student_payments` / `payment_allocations` / `receipts` / `refunds` / `financial_adjustments` / `cashboxes` / `cash_sessions` / `bank_reconciliations` بمعاملات ومفاتيح idempotency ومنع الحذف، ودفع جزئي/مكرر/رد/عكس مُختبر (P-014).
 - **المرحلة:** 9. **المتطلبات السابقة:** TASK-019 `COMPLETED`.
-- **الحالة:** `IN_PROGRESS` (دورة العمل الموسّعة بتاريخ 17 نوفمبر 2026).
+- **الملفات المتأثرة فعلياً:** migrations `2026_11_17_204605…204612_create_*_table.php`، `app/Support/FinanceAccess.php`، `app/Models/{Cashbox,CashSession,StudentPayment,Receipt,PaymentAllocation,Refund,FinancialAdjustment,BankReconciliation}.php`، `app/Actions/{OpenCashSession,CaptureStudentPayment,IssueReceipt,AllocatePaymentToInvoice,RequestRefund,ApproveRefund,ExecuteRefund,CloseCashSession,ApproveCashSessionClosure,RecordBankReconciliation}.php`، المصانع الثمانية، `tests/Feature/PaymentsAndReconciliationTest.php`، هذا الملف.
+- **الاختبارات المنفذة:** `php artisan migrate:fresh --force` ✓ (8 migrations)؛ `php artisan test --compact tests/Feature/PaymentsAndReconciliationTest.php` ✓ (7 tests / 36 assertions)؛ `php artisan test --compact` ✓ (164 tests / 514 assertions، منها 157 اختبار انحدار)؛ Pint ثم إعادة الاختبارات ✓.
+- **الحالة:** `COMPLETED`.
+- **الملاحظات:** من `docs/06` سطور 73 و92–93 و`docs/04` SCR-071–076. المبالغ `DECIMAL(16,2)` مع عملة وحساب BCMath بلا FLOAT. التحصيل idempotency بمفتاح ومرجع خارجي فريد، والإيصال لقطة غير قابلة للتعديل (إيصال واحد لكل دفعة، وفشل الطباعة لا يُلغي القبض SCR-074). التخصيص سجل_append-only يمنع التجاوز عن المتبقي من الدفعة أو الفاتورة بنفس العملة (لا قيد فريد على زوج دفعة/فاتورة كي تُسمح التخصيصات الجزئية المتكررة والتصحيحية). الرد يرتبط بالحركة الأصلية ويُقيد بالمتبقي، بفصل بين الطلب والاعتماد والتنفيذ، وينشئ تسوية عكسية (SCR-075). الورديات تحسب المتوقع من الدفعات، وتتطلب تفسير الفرق وموافقة مشرف يخالف أمين الصندوق؛ المطابقة البنكية تحسب الفرق وتُسجَّل كسجل غير قابل للتعديل. لا عملة/مبلغ/ضريبة/قواعد رد مُفترضة (P-014). الخدمات والإشعارات في TASK-021.
+- **المهمة التالية:** TASK-021 — تُستأنف تلقائياً.
 
 ### TASK-021 — الطلبات والإشعارات والمستندات (Services & Notifications)
 - **الوصف:** `service_request_types` / `service_requests` / `workflow_steps` / `request_events` / `notification_templates` / `notifications` / `delivery_attempts` / `announcements` مع مرفقات من TASK-008 وتدفق موثّق، دون لوائح خدمات مُفترضة.
@@ -388,3 +392,4 @@
 | 17 نوفمبر 2026 | تنفيذ TASK-017: الحضور وعناصر التقييم (جلسات وسجلات مقيّدة بالشعبة مع سجل تغييرات، عناصر بلا حدود مُفترضة، تفويض المدرس المسند)؛ 141 اختباراً ناجحاً؛ تحديد TASK-018 | فريق UMS الهندسي |
 | 17 نوفمبر 2026 | تنفيذ TASK-018: الدرجات والاعتماد والنشر والكشف (فصل الإدخال عن الاعتماد، لقطات منشورة/كشف/تخرج غير قابلة للتعديل، سحب مُدقَّق، بلا قواعد تقدير مُفترضة)؛ 151 اختباراً ناجحاً؛ تحديد TASK-019 | فريق UMS الهندسي |
 | 17 نوفمبر 2026 | تنفيذ TASK-019: سياسات الرسوم والفواتير (DECIMAL+عملة عبر BCMath، سياسات مؤرخة/مُنسَّخة بفصل الاعتماد، فواتير بلقطات بنود وبأرقام فريدة/idempotency، إلغاء موثّق بلا حذف)؛ 157 اختباراً ناجحاً؛ تحديد TASK-020 | فريق UMS الهندسي |
+| 21 نوفمبر 2026 | تنفيذ TASK-020: التحصيل والإيصالات والردود والتسوية (قبض idempotent، إيصالات لقطات، تخصيصات بلا تجاوز، رد بفصل مهام وتسوية عكسية، ورديات ومطابقة بنكية، كلها مُدقَّقة وغير قابلة للحذف)؛ 164 اختباراً ناجحاً؛ تحديد TASK-021 | فريق UMS الهندسي |
