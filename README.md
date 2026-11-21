@@ -1,58 +1,74 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# نظام إدارة الجامعة — University Management System (UMS)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+منصة إدارة جامعية عربية أولاً، مبنية لمجامعة خاصة متعددة الأحرم في صنعاء. الواجهة العربية (RTL) هي الأساس، مع جاهزية كاملة للغة الإنجليزية واتجاه LTR.
 
-## About Laravel
+> **الحالة:** التنفيذ التدريجي جارٍ وفق المخطط المعتمد `UMS-Master-Blueprint-v1.0`. لا تُخترع سياسات أكاديمية أو مالية أو بيانات جامعية حقيقية؛ كل ما يحتاج قراراً الجامعة موثّق في سجل القرارات المعلّقة.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## التقنية
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| العنصر | الإصدار |
+|---|---|
+| PHP | 8.3.36 (مُثبَّت محلياً) |
+| Laravel | 13 |
+| قاعدة البيانات | SQLite محلياً؛ MySQL 8.0.38 كبديل موثّق |
+| اختبارات | PHPUnit / Laravel Test Suite |
+| تنسيق الكود | Pint |
 
-## Learning Laravel
+## البنية
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Modular Monolith** داخل تطبيق Laravel واحد.
+- **RBAC + نطاق بيانات** (Data Scope) مع تحقق صلاحية في الخادم لكل إجراء حساس.
+- **سجل تدقيق** (Audit Logs) لكل عملية حساسة مع الفاعل والوقت والسبب ومعرّف الارتباط.
+- **idempotency** ومعاملات (transactions) لمنع التكرار وحماية سلامة البيانات المالية والأكاديمية.
+- **عدم الحذف الصامت**: الإلغاء/الإنهاء/السحب بإجراءات موثّقة تحافظ على السجلات.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## النطاقات المُنفّذة
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+1. الهوية والوصول (IAM) والأدوار ونطاقات البيانات والتفويض والبدلاء.
+2. التنظيم (الأحرم، المباني، القاعات، الكليات، الأقسام).
+3. البرامج الأكاديمية وإصداراتها والخطط الدراسية.
+4. المقررات وإصداراتها والمتطلبات السابقة.
+5. القبول والتحويل إلى طالب (idempotent).
+6. الطرح والشعب والجداول والإسناد بلا تعارض.
+7. تسجيل الطلاب (ذاتي/إداري) مع السعة والمتطلب البنيوي ومنع التعارض.
+8. الحضور وعناصر التقييم والدرجات والاعتماد والنشر والكشف وفحص التخرج.
+9. سياسات الرسوم والفواتير (المالية قيد الاستكمال).
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## التشغيل
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --force
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+> على بيئة التطوير الحالية يُستخدم `DB_CONNECTION=sqlite`. عند توفر خدمة `MYSQL80` يمكن التحويل مع مراعاة ملاحظات التوافق الموثّقة.
 
-## Contributing
+## الاختبارات
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan test --compact
+php vendor/laravel/pint/builds/pint --dirty --format agent
+```
 
-## Code of Conduct
+آخر نتيجة مسجّلة قبل رفع المستودع: **157 اختباراً ناجحاً / 478 تأكيداً**.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## التوثيق
 
-## Security Vulnerabilities
+| الملف | المحتوى |
+|---|---|
+| `PROJECT_EXECUTION_TRACKER.md` | حالة جميع المهام وسجل التغييرات |
+| `UMS-Master-Blueprint-v1.0/` | المخطط الرئيسي المعتمد (الشاشات، البيانات، القيود) |
+| `Documentation/Decisions/PENDING_DECISIONS_REGISTER.md` | القرارات الجامعية المعلّقة |
+| `Documentation/Decisions/ADR_LOG.md` | قرارات الهندسة المعمارية |
+| `Documentation/Architecture/` | رؤية المعمارية وملاحظات نموذج البيانات |
+| `Documentation/UI-UX/` | نظام التصميم والنماذج المعتمدة |
+| `Documentation/Progress-Reports/` | تقارير تنفيذ كل مهمة |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## الترخيص
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+مادة خاصة بمشروع الجامعة — الاستخدام الداخلي وفق توجيهات المالك.

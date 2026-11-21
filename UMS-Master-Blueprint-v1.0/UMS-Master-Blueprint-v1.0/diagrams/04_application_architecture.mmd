@@ -1,0 +1,10 @@
+flowchart TB
+ Browser[متصفح الموظف والطالب والمتقدم] --> Laravel[Laravel + Livewire + Blade]
+ Laravel --> IAM[هوية وسياسات ونطاقات]
+ IAM --> Modules[وحدات Modular Monolith]
+ Modules --> DB[(MySQL)]
+ Modules --> Files[(Private file storage)]
+ Modules --> Queue[Queue + Scheduler]
+ Queue --> Ext[Email / SMS / Payment / Reports]
+ IT[تقنية المعلومات] --> Monitor[Logs / Metrics / Backups]
+ DB --> Backup[نسخ مشفرة واختبار استعادة]

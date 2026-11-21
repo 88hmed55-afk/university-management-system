@@ -1,0 +1,96 @@
+/* ============================================================
+   UMS Design Tokens — v1.0 (preliminary)
+   Arabic-first, RTL-native. No external fonts or assets.
+   Usage: import once at the root of the app stylesheet.
+   ============================================================ */
+
+:root {
+  /* ---- Color: neutrals & ink ---- */
+  --ink-900: #0B1B2B;
+  --ink-700: #24384B;
+  --ink-500: #5B6B7B;
+  --ink-300: #93A1AE;
+
+  /* ---- Color: brand ---- */
+  --brand-900: #0B2438;
+  --brand-800: #123A57;
+  --brand-700: #1B5578;
+  --brand-600: #22749B;
+  --teal-600: #0E7C7B;
+  --accent-600: #B08A4F;
+
+  /* ---- Color: surfaces & borders ---- */
+  --surface-0: #FFFFFF;
+  --surface-1: #F6F8FA;
+  --surface-2: #EEF2F6;
+  --border-1: #DCE3EA;
+  --border-2: #C5D0DA;
+
+  /* ---- Color: semantic ---- */
+  --success: #1E7F5C;
+  --warning: #A86500;
+  --danger:  #B42318;
+  --info:    #2563A6;
+
+  --success-bg: #E9F5EF;
+  --warning-bg: #FCF3E4;
+  --danger-bg:  #FCECEA;
+  --info-bg:    #EAF1FA;
+
+  /* ---- Typography ---- */
+  --font-ar: "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-en: "Segoe UI", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --fs-display: 34px;
+  --fs-h1: 26px;
+  --fs-h2: 20px;
+  --fs-h3: 16px;
+  --fs-body: 14px;
+  --fs-small: 12.5px;
+  --fs-micro: 11px;
+  --lh-body: 1.8;
+  --lh-tight: 1.35;
+
+  /* ---- Spacing ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+
+  /* ---- Radius & shadow ---- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-1: 0 1px 2px rgba(11, 27, 43, .06);
+  --shadow-2: 0 4px 14px rgba(11, 27, 43, .08);
+
+  /* ---- Layout ---- */
+  --sidebar-w: 248px;
+  --sidebar-collapsed-w: 72px;
+  --topbar-h: 64px;
+  --content-max: 1440px;
+  --grid-gap: 24px;
+}
+
+/* ---- RTL utility: isolate codes/numbers as LTR ---- */
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Focus visibility (WCAG) ---- */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand-600);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
